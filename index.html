@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App Quản Lý Trọ Mạnh Khang</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f0f2f5; padding: 10px; margin: 0; display: none; } /* Ẩn body để chờ nhập Pass */
+        body { font-family: -apple-system, sans-serif; background: #f0f2f5; padding: 10px; margin: 0; display: none; }
         .header { background: #d32f2f; color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 20px; }
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px; border-left: 5px solid #1a73e8; }
         .nha-o { border-left: 5px solid #f4b400; background: #fffde7; }
@@ -15,6 +15,11 @@
         input, select { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
         .input-yellow { background-color: #fff9c4; border: 1px solid #fbc02d; }
         .select-person { background-color: #e3f2fd; border: 1px solid #2196f3; font-weight: bold; }
+        
+        /* Style cho nút tính riêng từng phòng */
+        .btn-le { width: 100%; padding: 12px; background: #2196f3; color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .btn-le:active { background: #0d47a1; }
+
         .result-box { background: #e8f0fe; padding: 12px; border-radius: 8px; margin-top: 10px; text-align: right; }
         .total-val { font-size: 1.2rem; font-weight: bold; color: #d32f2f; }
         .summary-card { background: #333; color: white; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center; margin-bottom: 90px; }
@@ -39,7 +44,6 @@
 <button class="btn-tinh" onclick="tinhTatCa()">TÍNH TỔNG TẤT CẢ</button>
 
 <script>
-    // 1. BẢO MẬT: Nhập mã PIN (Anh Khang có thể sửa 2026 thành số khác)
     const PIN_CODE = "070998";
     const userPass = prompt("Chào anh Khang, vui lòng nhập mã PIN:");
     if (userPass === PIN_CODE) {
@@ -49,11 +53,9 @@
         window.location.reload();
     }
 
-    // 2. CẤU HÌNH GIÁ ĐƠN VỊ
-    const giaDienUnit = 3000; 
+    const giaDienUnit = 3500; 
     const giaNuocUnit = 13000;
 
-    // 3. DANH SÁCH 10 PHÒNG & 3 CĂN NHÀ
     const danhSach = [
         {ten: "Phòng 1", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
         {ten: "Phòng 2", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
@@ -64,10 +66,10 @@
         {ten: "Phòng 7", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
         {ten: "Phòng 8", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
         {ten: "Phòng 9", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 10", gia1: 600000,gia2:700000,  wifi:0, rac: 10000},
+        {ten: "Phòng 10",gia1: 600000, gia2:700000, wifi:0,  rac: 10000},
         {ten: "Nhà Nguyên Căn 1", gia1: 5000000, gia2: 5000000, wifi: 100000, rac: 30000, loai: "nha"},
-        {ten: "Nhà Nguyên Căn 2", gia1: 4500000, gia2: 4500000, wifi: 100000, rac: 30000, loai: "nha"},
-        {ten: "Nhà Nguyên Căn 3", gia1: 6000000, gia2: 6000000, wifi: 100000, rac: 30000, loai: "nha"}
+        {ten: "Nhà Nguyên Căn Cao Lãnh", gia1: 4500000, gia2: 4500000, wifi: 100000, rac: 30000, loai: "nha"},
+        {ten: "Nhà Nguyên Căn Cao Lãnh 2", gia1: 6000000, gia2: 6000000, wifi: 100000, rac: 30000, loai: "nha"}
     ];
 
     const container = document.getElementById('app-content');
@@ -112,6 +114,8 @@
                     <input type="number" class="nuoc-moi" placeholder="Mới">
                 </div>
 
+                <button class="btn-le" onclick="tinhRieng(${index})">TÍNH PHÒNG NÀY</button>
+
                 <div class="result-box">
                     <span>Thành tiền: </span><span class="total-val">0đ</span>
                 </div>
@@ -124,27 +128,43 @@
         block.querySelector('.gia-nha').value = block.querySelector('.select-person').value;
     }
 
+    // Hàm tính tiền riêng cho từng phòng
+    function tinhRieng(index) {
+        const block = document.getElementById(`room-${index}`);
+        const vNha = parseFloat(block.querySelector('.gia-nha').value) || 0;
+        const vWifi = parseFloat(block.querySelector('.gia-wifi').value) || 0;
+        const vRac = parseFloat(block.querySelector('.gia-rac').value) || 0;
+        const dCu = parseFloat(block.querySelector('.dien-cu').value) || 0;
+        const dMoi = parseFloat(block.querySelector('.dien-moi').value) || 0;
+        const nCu = parseFloat(block.querySelector('.nuoc-cu').value) || 0;
+        const nMoi = parseFloat(block.querySelector('.nuoc-moi').value) || 0;
+
+        const tDien = (dMoi - dCu) > 0 ? (dMoi - dCu) * giaDienUnit : 0;
+        const tNuoc = (nMoi - nCu) > 0 ? (nMoi - nCu) * giaNuocUnit : 0;
+
+        const tongPhong = vNha + vWifi + vRac + tDien + tNuoc;
+        block.querySelector('.total-val').innerText = tongPhong.toLocaleString('vi-VN') + " đ";
+        
+        capNhatTongDoanhThu(); // Cập nhật luôn con số tổng ở dưới
+    }
+
+    // Hàm tính tổng tất cả
     function tinhTatCa() {
-        let tongTatCa = 0;
         danhSach.forEach((item, index) => {
-            const block = document.getElementById(`room-${index}`);
-            const vNha = parseFloat(block.querySelector('.gia-nha').value) || 0;
-            const vWifi = parseFloat(block.querySelector('.gia-wifi').value) || 0;
-            const vRac = parseFloat(block.querySelector('.gia-rac').value) || 0;
-            const dCu = parseFloat(block.querySelector('.dien-cu').value) || 0;
-            const dMoi = parseFloat(block.querySelector('.dien-moi').value) || 0;
-            const nCu = parseFloat(block.querySelector('.nuoc-cu').value) || 0;
-            const nMoi = parseFloat(block.querySelector('.nuoc-moi').value) || 0;
+            tinhRieng(index);
+        });
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
 
-            const tDien = (dMoi - dCu) > 0 ? (dMoi - dCu) * giaDienUnit : 0;
-            const tNuoc = (nMoi - nCu) > 0 ? (nMoi - nCu) * giaNuocUnit : 0;
-
-            const tongPhong = vNha + vWifi + vRac + tDien + tNuoc;
-            tongTatCa += tongPhong;
-            block.querySelector('.total-val').innerText = tongPhong.toLocaleString('vi-VN') + " đ";
+    // Hàm phụ để cộng dồn doanh thu hiển thị ở dưới cùng
+    function capNhatTongDoanhThu() {
+        let tongTatCa = 0;
+        const tatCaThanhTien = document.querySelectorAll('.total-val');
+        tatCaThanhTien.forEach(span => {
+            const giaTri = parseInt(span.innerText.replace(/\./g, '').replace(' đ', '')) || 0;
+            tongTatCa += giaTri;
         });
         document.getElementById('all-total').innerText = tongTatCa.toLocaleString('vi-VN') + " đ";
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
 </body>
