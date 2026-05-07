@@ -5,79 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App Quản Lý Trọ Mạnh Khang</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f0f2f5; padding: 10px; margin: 0; display: none; }
-        .header { background: #d32f2f; color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 20px; }
-        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px; border-left: 5px solid #1a73e8; }
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; display: none; }
+        .header { background-color: #d32f2f; color: white; text-align: center; padding: 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; margin-bottom: 20px; }
+        .app-container { padding: 0 15px; }
+        .room-card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 15px; margin-bottom: 15px; border-left: 5px solid #2196f3; }
         .nha-o { border-left: 5px solid #f4b400; background: #fffde7; }
-        .room-title { font-weight: bold; font-size: 1.1rem; color: #333; display: block; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .input-row { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
-        .input-row label { width: 105px; font-size: 0.85rem; color: #666; font-weight: bold; }
-        input, select { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        .room-title { color: #1565c0; font-weight: bold; font-size: 18px; margin-bottom: 10px; display: block; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .input-row { margin-bottom: 12px; }
+        .input-row label { display: block; font-size: 13px; color: #666; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
         .input-yellow { background-color: #fff9c4; border: 1px solid #fbc02d; }
         .input-green { background-color: #e8f5e9; border: 1px solid #4caf50; font-weight: bold; color: #2e7d32; }
-        .btn-le { width: 100%; padding: 12px; background: #2196f3; color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
-        .result-box { background: #e8f0fe; padding: 12px; border-radius: 8px; margin-top: 10px; }
-        .total-val { font-size: 1.1rem; font-weight: bold; color: #d32f2f; display: block; text-align: right; }
-        .debt-val { font-size: 1.1rem; font-weight: bold; color: #ff5722; display: block; text-align: right; margin-top: 5px; }
-        .summary-card { background: #333; color: white; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center; margin-bottom: 90px; }
-        .grand-total { font-size: 1.8rem; color: #ffeb3b; font-weight: bold; display: block; margin-top: 10px; }
-        .btn-tinh { position: fixed; bottom: 10px; left: 10px; right: 10px; padding: 18px; background: #28a745; color: white; border: none; border-radius: 15px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 100; }
+        .input-double { display: flex; gap: 10px; }
+        .input-double div { flex: 1; min-width: 0; }
+        .btn-room { width: 100%; padding: 14px; background-color: #2196f3; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .summary { text-align: right; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ddd; }
+        .total-bill { color: #d32f2f; font-weight: bold; font-size: 1.1rem; }
+        .debt { color: #ff5722; font-weight: bold; }
+        .grand-summary { background: #333; color: white; padding: 20px; border-radius: 15px; text-align: center; margin: 20px 15px 100px 15px; }
+        .btn-total { position: fixed; bottom: 15px; left: 15px; right: 15px; background-color: #28a745; color: white; padding: 18px; border: none; font-size: 18px; font-weight: bold; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 100; }
+        .note-gia { font-size: 11px; color: #d32f2f; font-style: italic; }
     </style>
 </head>
 <body id="mainBody">
 
 <div class="header">
-    <h2>QUẢN LÝ NHÀ TRỌ TRỌNG HIẾU</h2>
-    <p>Hệ thống tính tiền Nhà • Nước Bình • Nợ Cũ</p>
+    <h1>QUẢN LÝ NHÀ TRỌ TRỌNG HIẾU</h1>
+    <p>Hệ thống tính tiền Nhà • Điện • Nước • Nợ</p>
 </div>
 
-<div id="app-content"></div>
+<div id="app-content" class="app-container"></div>
 
-<div class="summary-card">
-    <span>TỔNG DOANH THU THỰC TẾ:</span>
-    <span id="all-total" class="grand-total">0 đ</span>
+<div class="grand-summary">
+    <div>TỔNG THỰC THU (TIỀN MẶT):</div>
+    <div id="all-total" style="font-size: 2rem; color: #ffeb3b; font-weight: bold; margin-top: 10px;">0 đ</div>
 </div>
 
-<button class="btn-tinh" onclick="tinhTatCa()">TÍNH TỔNG TẤT CẢ</button>
+<button class="btn-total" onclick="tinhTatCa()">TÍNH TỔNG TẤT CẢ</button>
 
 <script>
     const PIN_CODE = "070998";
-    const userPass = prompt("Chào anh Khang, vui lòng nhập mã PIN:");
-    if (userPass === PIN_CODE) {
-        document.getElementById('mainBody').style.display = 'block';
-    } else {
-        alert("Sai mật khẩu!");
-        window.location.reload();
-    }
+    if (sessionStorage.getItem('isAuth') !== 'true') {
+        if (prompt("Chào anh Khang, nhập mã PIN:") === PIN_CODE) {
+            sessionStorage.setItem('isAuth', 'true');
+            document.getElementById('mainBody').style.display = 'block';
+        } else { alert("Sai mã!"); window.location.reload(); }
+    } else { document.getElementById('mainBody').style.display = 'block'; }
 
-    const giaDienUnit = 3500; 
-    const giaNuocUnit = 13000;
-    const giaNuocBinhUnit = 13000;
+    const GIA_DIEN_TRO = 3500; 
+    const GIA_NUOC_TRO = 13000;
 
     const danhSach = [
-        {ten: "Phòng 1", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 2", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 3", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 4", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 5", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 6", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 7", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 8", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 9", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Phòng 10", gia1: 600000, gia2: 700000, wifi:0, rac: 10000},
-        {ten: "Nhà Nguyên Căn 1", gia1: 5000000, gia2: 5000000, wifi: 100000, rac: 30000, loai: "nha"},
-        {ten: "Nhà Nguyên Căn 2", gia1: 4500000, gia2: 4500000, wifi: 100000, rac: 30000, loai: "nha"},
-        {ten: "Nhà Nguyên Căn 3", gia1: 6000000, gia2: 6000000, wifi: 100000, rac: 30000, loai: "nha"}
+        {ten: "Phòng 1", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 2", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 3", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 4", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 5", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 6", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 7", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 8", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 9", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Phòng 10", gia1: 600000, gia2: 700000, rac: 10000, loai: "tro"},
+        {ten: "Nhà Nguyên Căn HCL", gia1: 1500000, wifi: 0, rac: 10000, loai: "nha"},
+        {ten: "Nhà Nguyên Căn Ngoại", gia1: 1500000, wifi: 0, rac: 10000, loai: "nha"},
+        {ten: "Nhà Nguyên Căn Ngoại 2", gia1: 2000000, wifi: 0, rac: 10000, loai: "nha"}
     ];
 
     const container = document.getElementById('app-content');
     danhSach.forEach((item, index) => {
-        const classNha = item.loai === "nha" ? "nha-o" : "";
+        const isNha = item.loai === "nha";
+        const classCard = isNha ? "nha-o" : "";
+        
         container.innerHTML += `
-            <div class="card ${classNha}" id="room-${index}">
+            <div class="room-card ${classCard}" id="room-${index}">
                 <span class="room-title">${item.ten}</span>
                 
-                <div class="input-row">
+                <div class="input-row" style="${isNha ? 'display:none' : ''}">
                     <label>Số người ở:</label>
                     <select onchange="doiGia(${index})" class="sel-per">
                         <option value="${item.gia1}">1 Người</option>
@@ -90,33 +93,53 @@
                     <input type="number" class="gia-nha input-yellow" value="${item.gia1}">
                 </div>
 
-                <div class="input-row">
-                    <label>Số Điện:</label>
-                    <input type="number" class="dien-cu" placeholder="Cũ">
-                    <input type="number" class="dien-moi" placeholder="Mới">
+                <div class="input-double">
+                    <div>
+                        <label>Điện Cũ:</label>
+                        <input type="number" class="dien-cu" placeholder="Số cũ">
+                    </div>
+                    <div>
+                        <label>Điện Mới:</label>
+                        <input type="number" class="dien-moi" placeholder="Số mới">
+                    </div>
                 </div>
-                
-                <div class="input-row">
-                    <label>Số Nước:</label>
-                    <input type="number" class="nuoc-cu" placeholder="Cũ">
-                    <input type="number" class="nuoc-moi" placeholder="Mới">
+
+                <div class="input-row" style="${isNha ? '' : 'display:none'}">
+                    <label>Giá điện (Nhà nguyên căn tự nhập):</label>
+                    <input type="number" class="gia-dien-nha" placeholder="Ví dụ: 3000">
+                </div>
+
+                <div class="input-double">
+                    <div>
+                        <label>Nước Cũ:</label>
+                        <input type="number" class="nuoc-cu" placeholder="Số cũ">
+                    </div>
+                    <div>
+                        <label>Nước Mới:</label>
+                        <input type="number" class="nuoc-moi" placeholder="Số mới">
+                    </div>
+                </div>
+
+                <div class="input-row" style="${isNha ? '' : 'display:none'}">
+                    <label>Giá nước (Nhà nguyên căn tự nhập):</label>
+                    <input type="number" class="gia-nuoc-nha" placeholder="Ví dụ: 10000">
+                </div>
+
+                <div class="input-row" style="${isNha ? 'display:none' : ''}">
+                    <label>Nước bình (13k/bình):</label>
+                    <input type="number" class="nuoc-binh" value="0">
                 </div>
 
                 <div class="input-row">
-                    <label>Nước bình (13k):</label>
-                    <input type="number" class="nuoc-binh" placeholder="Số bình" value="0">
+                    <label>Khách đã đưa:</label>
+                    <input type="number" class="khach-tra input-green" placeholder="Tiền mặt nhận được">
                 </div>
 
-                <div class="input-row">
-                    <label>Khách trả:</label>
-                    <input type="number" class="khach-tra input-green" placeholder="Số tiền đưa">
-                </div>
-
-                <button class="btn-le" onclick="tinhRieng(${index})">TÍNH PHÒNG NÀY</button>
-
-                <div class="result-box">
-                    <span class="total-val" id="tong-${index}">Tổng hóa đơn: 0 đ</span>
-                    <span class="debt-val" id="no-${index}">Còn nợ: 0 đ</span>
+                <button class="btn-room" onclick="tinhRieng(${index})">TÍNH PHÒNG NÀY</button>
+                <div class="summary">
+                    <div class="note-gia">${isNha ? '* Tự nhập giá điện nước' : '* Điện 3.5k, Nước 13k'}</div>
+                    <div>Tổng hóa đơn: <span class="total-bill" id="tong-${index}">0 đ</span></div>
+                    <div>Còn nợ: <span class="debt" id="no-${index}">0 đ</span></div>
                 </div>
             </div>
         `;
@@ -129,26 +152,36 @@
 
     function tinhRieng(index) {
         const block = document.getElementById(`room-${index}`);
+        const item = danhSach[index];
+        
         const vNha = parseFloat(block.querySelector('.gia-nha').value) || 0;
         const dCu = parseFloat(block.querySelector('.dien-cu').value) || 0;
         const dMoi = parseFloat(block.querySelector('.dien-moi').value) || 0;
         const nCu = parseFloat(block.querySelector('.nuoc-cu').value) || 0;
         const nMoi = parseFloat(block.querySelector('.nuoc-moi').value) || 0;
-        const sBinh = parseFloat(block.querySelector('.nuoc-binh').value) || 0;
         const vKhachTra = parseFloat(block.querySelector('.khach-tra').value) || 0;
 
-        const tDien = (dMoi - dCu) > 0 ? (dMoi - dCu) * giaDienUnit : 0;
-        const tNuoc = (nMoi - nCu) > 0 ? (nMoi - nCu) * giaNuocUnit : 0;
-        const tBinh = sBinh * giaNuocBinhUnit;
-        const tRac = danhSach[index].rac || 0;
-        const tWifi = danhSach[index].wifi || 0;
+        let tDien = 0, tNuoc = 0, tBinh = 0;
 
-        const tongHoaDon = vNha + tDien + tNuoc + tBinh + tRac + tWifi;
+        if (item.loai === "tro") {
+            tDien = (dMoi - dCu) * GIA_DIEN_TRO;
+            tNuoc = (nMoi - nCu) * GIA_NUOC_TRO;
+            tBinh = (parseFloat(block.querySelector('.nuoc-binh').value) || 0) * 13000;
+        } else {
+            // Nhà nguyên căn: Lấy giá từ ô tự nhập
+            const giaDienNha = parseFloat(block.querySelector('.gia-dien-nha').value) || 0;
+            const giaNuocNha = parseFloat(block.querySelector('.gia-nuoc-nha').value) || 0;
+            tDien = (dMoi - dCu) * giaDienNha;
+            tNuoc = (nMoi - nCu) * giaNuocNha;
+        }
+
+        const tRac = item.rac || 0;
+        const tWifi = item.wifi || 0;
+        const tongHoaDon = vNha + (tDien > 0 ? tDien : 0) + (tNuoc > 0 ? tNuoc : 0) + tBinh + tRac + tWifi;
         const conNo = tongHoaDon - vKhachTra;
 
-        document.getElementById(`tong-${index}`).innerText = "Tổng hóa đơn: " + tongHoaDon.toLocaleString('vi-VN') + " đ";
-        document.getElementById(`no-${index}`).innerText = "Còn nợ: " + (conNo > 0 ? conNo.toLocaleString('vi-VN') : 0) + " đ";
-        
+        document.getElementById(`tong-${index}`).innerText = tongHoaDon.toLocaleString('vi-VN') + " đ";
+        document.getElementById(`no-${index}`).innerText = (conNo > 0 ? conNo.toLocaleString('vi-VN') : 0) + " đ";
         capNhatTongDoanhThu();
     }
 
@@ -159,8 +192,7 @@
 
     function capNhatTongDoanhThu() {
         let tongThucThu = 0;
-        const tatCaKhachTra = document.querySelectorAll('.khach-tra');
-        tatCaKhachTra.forEach(input => {
+        document.querySelectorAll('.khach-tra').forEach(input => {
             tongThucThu += parseFloat(input.value) || 0;
         });
         document.getElementById('all-total').innerText = tongThucThu.toLocaleString('vi-VN') + " đ";
