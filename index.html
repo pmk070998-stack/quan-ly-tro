@@ -5,54 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Trọ Mạnh Khang</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; }
-        .header { background-color: #d32f2f; color: white; text-align: center; padding: 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; margin-bottom: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; }
+        .header { background-color: #1565c0; color: white; text-align: center; padding: 25px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .app-container { padding: 0 15px; }
-        .room-card { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; border-left: 6px solid #2196f3; }
-        .nha-o { border-left: 6px solid #f4b400; background: #fffde7; }
-        .room-title { color: #1565c0; font-weight: 900; font-size: 22px; margin-bottom: 15px; display: block; border-bottom: 2px solid #eee; padding-bottom: 8px; }
+        .room-card { background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 25px; border-left: 8px solid #1976d2; }
+        .nha-o { border-left: 8px solid #ffa000; background: #fffde7; }
+        .room-title { color: #0d47a1; font-weight: 900; font-size: 24px; margin-bottom: 15px; display: block; border-bottom: 2px solid #eee; padding-bottom: 10px; text-transform: uppercase; }
         .input-row { margin-bottom: 15px; }
-        .input-row label { display: block; font-size: 14px; color: #444; margin-bottom: 6px; font-weight: bold; }
-        input { width: 100%; padding: 14px; border: 1px solid #bbb; border-radius: 10px; font-size: 18px; box-sizing: border-box; }
-        .input-yellow { background-color: #fff9c4; border: 2px solid #fbc02d; font-weight: bold; }
-        .input-green { background-color: #e8f5e9; border: 2px solid #4caf50; font-weight: bold; color: #2e7d32; }
+        .input-row label { display: block; font-size: 15px; color: #333; margin-bottom: 8px; font-weight: bold; }
+        input { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 10px; font-size: 18px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #1976d2; box-shadow: 0 0 5px rgba(25,118,210,0.3); }
+        .input-yellow { background-color: #fff9c4; border: 2px solid #fbc02d; font-weight: 900; color: #444; }
+        .input-green { background-color: #e8f5e9; border: 2px solid #4caf50; font-weight: 900; color: #2e7d32; }
         .input-double { display: flex; gap: 12px; margin-bottom: 15px; }
-        .input-double div { flex: 1; min-width: 0; }
-        .btn-room { width: 100%; padding: 16px; background-color: #2196f3; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
+        .input-double div { flex: 1; }
+        .btn-room { width: 100%; padding: 18px; background-color: #1976d2; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 10px; text-transform: uppercase; transition: 0.3s; }
+        .btn-room:active { background-color: #0d47a1; transform: scale(0.98); }
         
-        /* HÓA ĐƠN CHI TIẾT */
-        .calculation-detail { background: #ffffff; border: 3px solid #1565c0; border-radius: 12px; padding: 20px; margin-top: 15px; display: none; }
-        .detail-header { font-size: 24px; font-weight: 900; color: #d32f2f; margin-bottom: 15px; text-decoration: underline; display: block; }
-        .detail-line { display: flex; justify-content: space-between; padding: 10px 0; font-size: 20px; font-weight: 800; border-bottom: 1px solid #f0f0f0; color: #222; }
+        /* PHẦN CHI TIẾT HÓA ĐƠN */
+        .calculation-detail { background: #ffffff; border: 3px solid #1976d2; border-radius: 15px; padding: 20px; margin-top: 20px; display: none; position: relative; }
+        .detail-header { font-size: 24px; font-weight: 900; color: #d32f2f; margin-bottom: 15px; text-align: left; display: block; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; }
+        .detail-line { display: flex; justify-content: space-between; padding: 10px 0; font-size: 19px; font-weight: 700; border-bottom: 1px solid #f0f0f0; color: #222; align-items: center; }
         
-        /* CẬP NHẬT HÀNG ĐIỆN VÀ NƯỚC: PHÓNG TO VÀ IN ĐẬM VỪA PHẢI */
-        .step-calc { font-size: 18px; color: #333; font-weight: 800; font-style: italic; margin-bottom: 5px; display: block; background: #f9f9f9; padding: 5px; border-radius: 5px; }
+        /* LÀM NỔI BẬT DÒNG TÍNH TOÁN */
+        .step-calc { font-size: 19px; color: #444; font-weight: 800; font-style: italic; margin-top: 10px; display: block; background: #f1f3f4; padding: 8px 12px; border-radius: 8px; border-left: 5px solid #555; }
         
-        .formula-box { background: #fffde7; padding: 15px; border-radius: 10px; margin-top: 15px; border: 2px dashed #fbc02d; }
-        .formula-title { font-weight: 900; font-size: 16px; margin-bottom: 8px; color: #c62828; }
-        .formula-text { font-size: 18px; font-weight: bold; color: #000; word-break: break-all; line-height: 1.5; }
-        .total-final { font-size: 28px; font-weight: 900; color: #d32f2f; text-align: right; margin-top: 15px; border-top: 4px solid #d32f2f; padding-top: 12px; }
-        .debt-final { font-size: 32px; font-weight: 900; color: #ff5722; text-align: right; margin-top: 5px; }
+        .formula-box { background: #fff9c4; padding: 15px; border-radius: 12px; margin-top: 20px; border: 2px dashed #fbc02d; }
+        .formula-title { font-weight: 900; font-size: 16px; margin-bottom: 8px; color: #c62828; text-transform: uppercase; }
+        .formula-text { font-size: 18px; font-weight: 800; color: #000; line-height: 1.6; word-break: break-all; }
+        
+        .total-final { font-size: 28px; font-weight: 900; color: #d32f2f; text-align: right; margin-top: 15px; border-top: 4px solid #d32f2f; padding-top: 15px; }
+        .debt-final { font-size: 30px; font-weight: 900; color: #ff5722; text-align: right; margin-top: 5px; }
 
-        .grand-summary { background: #222; color: white; padding: 25px; border-radius: 15px; text-align: center; margin: 30px 15px 120px 15px; }
-        .btn-total { position: fixed; bottom: 15px; left: 15px; right: 15px; background-color: #2e7d32; color: white; padding: 20px; border: none; font-size: 22px; font-weight: 900; border-radius: 15px; z-index: 100; box-shadow: 0 -4px 10px rgba(0,0,0,0.2); }
+        .grand-summary { background: #263238; color: white; padding: 30px; border-radius: 20px; text-align: center; margin: 40px 15px 120px 15px; }
+        .btn-total { position: fixed; bottom: 20px; left: 15px; right: 15px; background-color: #388e3c; color: white; padding: 20px; border: none; font-size: 22px; font-weight: 900; border-radius: 15px; z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1 style="margin:0; font-size: 26px;">QUẢN LÝ NHÀ TRỌ TRỌNG HIẾU</h1>
-    <p style="margin:5px 0 0; font-weight: bold;">Hệ thống tính tiền rõ ràng & minh bạch</p>
+    <h1 style="margin:0; font-size: 28px;">QUẢN LÝ NHÀ TRỌ MẠNH KHANG</h1>
+    <p style="margin:8px 0 0; font-weight: bold; opacity: 0.9;">Hệ thống tính tiền minh bạch cho khách thuê</p>
 </div>
 
 <div id="app-content" class="app-container"></div>
 
 <div class="grand-summary">
-    <div style="font-size: 18px; font-weight: bold;">TỔNG TIỀN MẶT ĐÃ THU:</div>
-    <div id="all-total" style="font-size: 2.5rem; color: #ffeb3b; font-weight: 900;">0 đ</div>
+    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">TỔNG TIỀN MẶT ĐÃ THU:</div>
+    <div id="all-total" style="font-size: 2.8rem; color: #ffeb3b; font-weight: 900;">0 đ</div>
 </div>
 
-<button class="btn-total" onclick="tinhTatCa()">TÍNH TỔNG TẤT CẢ PHÒNG</button>
+<button class="btn-total" onclick="tinhTatCa()">TÍNH TỔNG TẤT CẢ CÁC PHÒNG</button>
 
 <script>
     const GIA_DIEN_TRO = 3500; 
@@ -81,25 +84,25 @@
             <div class="room-card ${isNha ? 'nha-o' : ''}" id="room-${index}">
                 <span class="room-title">${item.ten}</span>
                 <div class="input-row">
-                    <label>Tiền nhà:</label>
+                    <label>Tiền thuê nhà (đ):</label>
                     <input type="number" class="gia-nha input-yellow" value="${item.gia}">
                 </div>
                 <div class="input-double">
-                    <div><label>Điện Cũ:</label><input type="number" class="dien-cu" placeholder="0"></div>
-                    <div><label>Điện Mới:</label><input type="number" class="dien-moi" placeholder="0"></div>
+                    <div><label>Điện Cũ:</label><input type="number" class="dien-cu" placeholder="Số cũ"></div>
+                    <div><label>Điện Mới:</label><input type="number" class="dien-moi" placeholder="Số mới"></div>
                 </div>
-                ${isNha ? `<div class="input-row"><label>Giá điện tự nhập:</label><input type="number" class="gia-dien-nha" value="3000"></div>` : ''}
+                ${isNha ? `<div class="input-row"><label>Giá điện nhà (tự nhập):</label><input type="number" class="gia-dien-nha" value="3000"></div>` : ''}
                 <div class="input-double">
-                    <div><label>Nước Cũ:</label><input type="number" class="nuoc-cu" placeholder="0"></div>
-                    <div><label>Nước Mới:</label><input type="number" class="nuoc-moi" placeholder="0"></div>
+                    <div><label>Nước Cũ:</label><input type="number" class="nuoc-cu" placeholder="Số cũ"></div>
+                    <div><label>Nước Mới:</label><input type="number" class="nuoc-moi" placeholder="Số mới"></div>
                 </div>
-                ${isNha ? `<div class="input-row"><label>Giá nước tự nhập:</label><input type="number" class="gia-nuoc-nha" value="10000"></div>` : ''}
-                ${!isNha ? `<div class="input-row"><label>Nước bình (13k):</label><input type="number" class="nuoc-binh" value="0"></div>` : ''}
+                ${isNha ? `<div class="input-row"><label>Giá nước nhà (tự nhập):</label><input type="number" class="gia-nuoc-nha" value="10000"></div>` : ''}
+                ${!isNha ? `<div class="input-row"><label>Số bình nước (13k/bình):</label><input type="number" class="nuoc-binh" value="0"></div>` : ''}
                 <div class="input-row">
-                    <label>Số tiền khách trả:</label>
-                    <input type="number" class="khach-tra input-green" placeholder="0">
+                    <label>Tiền khách đã đưa (đ):</label>
+                    <input type="number" class="khach-tra input-green" placeholder="Nhập số tiền đã nhận">
                 </div>
-                <button class="btn-room" onclick="tinhRieng(${index})">TÍNH PHÒNG NÀY</button>
+                <button class="btn-room" onclick="tinhRieng(${index})">TÍNH HÓA ĐƠN PHÒNG NÀY</button>
                 <div class="calculation-detail" id="detail-${index}"></div>
             </div>
         `;
@@ -137,27 +140,33 @@
             
             <div class="detail-line"><span>TIỀN NHÀ:</span> <span>${formatVND(vNha)}đ</span></div>
             
-            <div style="margin-top:12px;">
+            <div style="margin-top:15px;">
                 <span class="step-calc">Điện: (${formatVND(dMoi)} - ${formatVND(dCu)}) = ${formatVND(kDien)} ký</span>
-                <div class="detail-line"><span>TIỀN ĐIỆN:</span> <span>${formatVND(tDien)}đ</span></div>
+                <div class="detail-line">
+                    <span>TIỀN ĐIỆN (${formatVND(kDien)} ký x ${formatVND(gDien)}đ):</span> 
+                    <span>${formatVND(tDien)}đ</span>
+                </div>
             </div>
 
-            <div style="margin-top:12px;">
+            <div style="margin-top:15px;">
                 <span class="step-calc">Nước: (${formatVND(nMoi)} - ${formatVND(nCu)}) = ${formatVND(kNuoc)} khối</span>
-                <div class="detail-line"><span>TIỀN NƯỚC:</span> <span>${formatVND(tNuoc)}đ</span></div>
+                <div class="detail-line">
+                    <span>TIỀN NƯỚC (${formatVND(kNuoc)} khối x ${formatVND(gNuoc)}đ):</span> 
+                    <span>${formatVND(tNuoc)}đ</span>
+                </div>
             </div>
 
-            ${tBinh > 0 ? `<div class="detail-line"><span>NƯỚC BÌNH:</span> <span>${formatVND(tBinh)}đ</span></div>` : ''}
-            <div class="detail-line"><span>RÁC + KHÁC:</span> <span>${formatVND(tRac)}đ</span></div>
+            ${tBinh > 0 ? `<div class="detail-line"><span>NƯỚC BÌNH (${sBinh} bình x 13.000đ):</span> <span>${formatVND(tBinh)}đ</span></div>` : ''}
+            <div class="detail-line"><span>RÁC + DỊCH VỤ:</span> <span>${formatVND(tRac)}đ</span></div>
             
             <div class="formula-box">
-                <div class="formula-title">PHÉP CỘNG TỔNG:</div>
+                <div class="formula-title">TỔNG HỢP PHÉP TÍNH:</div>
                 <div class="formula-text">
                     ${formatVND(vNha)} + ${formatVND(tDien)} + ${formatVND(tNuoc)} ${tBinh > 0 ? '+ ' + formatVND(tBinh) : ''} + ${formatVND(tRac)}
                 </div>
             </div>
 
-            <div class="total-final">TỔNG CỘNG: ${formatVND(tongHoaDon)}đ</div>
+            <div class="total-final">TỔNG HÓA ĐƠN: ${formatVND(tongHoaDon)}đ</div>
             <div class="detail-line" style="color:#2e7d32; border-top:2px dashed #bbb; margin-top:10px; padding-top:10px;">
                 <span>KHÁCH ĐÃ ĐƯA:</span> <span>-${formatVND(vKhachTra)}đ</span>
             </div>
